@@ -20,6 +20,7 @@
      .template {display:none;}
     </style>
   <body>
+      <h1>Michael Wiszowaty</h1>
     <!--The div element for the map -->
     <div id="map"></div>
 
@@ -80,7 +81,7 @@ function initMap() {
       
       console.log(distance);
 
-      var info = v.address + " " + v.website + " " + v.district + "Distance =" + distance;
+      var info = v.address + " " + v.website + " " + v.district + " Distance =" + distance + "miles";
      
       var infowindow = new google.maps.InfoWindow({
         content: info
