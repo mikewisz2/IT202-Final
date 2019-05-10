@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+       /* Set the size of the div element that contains the map */
+      #map {
+        height: 400px;  /* The height is 400 pixels */
+        width: 100%;  /* The width is the width of the web page */
+       }
+    </style>
+  </head>
+    
+    <meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>repl.it</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+	 crossorigin="anonymous">
+
+   <style>
+     .template {display:none;}
+    </style>
+  <body>
+    <!--The div element for the map -->
+    <div id="map"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <script>
+// Initialize and add the map
+function initMap() {
+  // The location of Uluru
+  var chicago = {lat: 41.8781, lng: -87.6298};
+  var myLatlng = new google.maps.LatLng(41.8781,-87.6298);
+  // The map, centered at Uluru
+  var map = new google.maps.Map(
+      document.getElementById('map'), {zoom: 11, center: chicago});
+    
+    var marker = new google.maps.Marker({
+    position: myLatlng,
+    
+});
+    
+    marker.setMap(map);
+    
+    marker.addListener('click', function() {
+        infowindow.open(map, marker);
+      });
+
+
+  $.get("https://data.cityofchicago.org/resource/9rg7-mz9y.json",
+
+      function(response) {
+        console.log("in data callback");
+        var data = response;
+        createMarkers(map, data );
+      });
+
+}
+
+  function createMarkers (map, data) {
+    console.log(data);
+      
+    $.each(data, function(i,v) {
+
+      var location = {lat: parseFloat(v.latitude), lng: parseFloat(v.longitude) }
+      
+      var marker = new google.maps.Marker({position: location, map: map});
+        
+    
+      console.log(v.latitude);
+        
+      var deglen = 110.25;
+      console.log(v.latitude);
+      var x = v.latitude - 41.8781;
+      console.log("x = "+x);
+      console.log(v.longitude);
+      var y = (v.longitude - (-87.6298))*Math.cos(41.8781);
+      console.log("y= " +y);
+      var distance = deglen*Math.sqrt(x*x + y*y);
+      
+      console.log(distance);
+
+      var info = v.address + " " + v.website + " " + v.district + "Distance =" + distance;
+     
+      var infowindow = new google.maps.InfoWindow({
+        content: info
+      });
+
+      marker.addListener('click', function() {
+        infowindow.open(map, marker);
+      });
+
+    });
+
+  }
+
+
+
+    </script>
+      
+      <body>
+<div class="card template" style="width: 18rem;">
+		<div class="card-body">
+			<h5 id="title" class="card-title">Card title</h5>
+			<h6 id="subtitle" class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+			<p id="text" class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+			<a id="projectLink" href="#" class="btn btn-primary">Connect</a>
+		</div>
+	</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js">
+  </script>
+  
+  <div id ="myDIV3" style="visibility:hidden;">
+</div>
+  
+
+<script>
+		$(document).ready(function(){
+      var name = "";
+      $("body").on("click", ".btn", function(e) {name = ($(this).val());
+                                                 myDIV3.innerHTML =  "You are connected with " + name;
+                                                document.getElementById("myDIV3").style.visibility = 'visible';});
+      var dataname = "";
+      $("body").on("click", ".btn", function(e) {dataname = await });
+    console.log("dataname");
+      var url = "https://data.cityofchicago.org/resource/9rg7-mz9y.json";
+$.get(url, function(response) {
+  console.log(response);
+  var data = response;
+  $.each(data, function(i,v) {
+    var clone = $(".template").clone();
+    clone.find(".card-title").text(v.district);
+    clone.find(".btn").val(v.address);
+    clone.find(".card-title").addClass(v.fax);
+    clone.find(".card-title").attr("data-results", v.fax);
+    clone.find(".card-text").text(v.fax);
+    clone.find(".card-subtitle").text(v.address);    
+    clone.removeClass("template");
+    $("body").append(clone);
+  });
+  
+})  
+  
+});
+	</script>
+    <!--Load the API from the specified URL
+    * The async attribute allows the browser to render the page while the API loads
+    * The key parameter will contain your own API key (which is not needed for this tutorial)
+    * The callback parameter executes the initMap() function
+    -->
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDa4dMSOASs_iLQnhrPoQ8EZgj2Im_pZ7o&callback=initMap">
+    </script>
+  </body>
+</html>
